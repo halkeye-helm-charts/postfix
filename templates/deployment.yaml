@@ -24,31 +24,21 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
-            {{- if .Values.postfix.rootalias }}
-            - name: ROOT_ALIAS
-              value: {{ .Values.postfix.rootalias | quote }}
+            {{- if .Values.postfix.relay_host }}
+            - name: TX_SMTP_RELAY_HOST
+              value: {{ .Values.postfix.relay_host | quote }}
             {{- end }}
-            {{- if .Values.postfix.relay }}
-            - name: RELAY
-              value: {{ .Values.postfix.relay | quote }}
+            {{- if .Values.postfix.relay_myhostname }}
+            - name: TX_SMTP_RELAY_MYHOSTNAME
+              value: {{ .Values.postfix.relay_myhostname | quote }}
             {{- end }}
-            - name: TLS
-              value: {{ .Values.postfix.tls | quote }}
-            {{- if .Values.postfix.mynetworks }}
-            - name: MY_NETWORKS
-              value: {{ .Values.postfix.mynetworks | join "," | quote }}
+            {{- if .Values.postfix.relay_username }}
+            - name: TX_SMTP_RELAY_USERNAME
+              value: {{ .Values.postfix.relay_username | quote }}
             {{- end }}
-            {{- if .Values.postfix.mydestination }}
-            - name: MY_DESTINATION
-              value: {{ .Values.postfix.mydestination | join "," | quote }}
-            {{- end }}
-            {{- if .Values.postfix.mailname }}
-            - name: MAILNAME
-              value: {{ .Values.postfix.mailname | quote }}
-            {{- end }}
-            {{- if .Values.postfix.sasl_auth }}
-            - name: SASL_AUTH
-              value: {{ .Values.postfix.sals_auth | quote }}
+            {{- if .Values.postfix.relay_password }}
+            - name: TX_SMTP_RELAY_PASSWORD
+              value: {{ .Values.postfix.relay_password | quote }}
             {{- end }}
           ports:
             - name: smtp

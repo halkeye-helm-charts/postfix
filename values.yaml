@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: r.j3ss.co/postfix
+  repository: applariat/tx-smtp-relay
   tag: latest
   pullPolicy: Always
 
@@ -13,13 +13,10 @@ nameOverride: ""
 fullnameOverride: ""
 
 postfix:
-  rootalias:
-  relay:
-  tls: 1
-  mailname:
-  mynetworks:
-  mydestination:
-  sasl_auth:
+  relay_host:
+  relay_myhostname:
+  relay_username:
+  relay_password:
 
 service:
   type: ClusterIP
