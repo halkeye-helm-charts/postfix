@@ -11,9 +11,9 @@ spec:
   type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.port }}
-      targetPort: http
+      targetPort: smtp
       protocol: TCP
-      name: http
+      name: smtp
   selector:
     app.kubernetes.io/name: {{ include "postfix.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
