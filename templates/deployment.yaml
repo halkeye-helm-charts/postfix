@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "postfix.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "postfix.name" . }}
+    helm.sh/chart: {{ include "postfix.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "postfix.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "postfix.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            {{- if .Values.postfix.rootalias }}
+            - name: ROOT_ALIAS
+              value: {{ .Values.postfix.rootalias | quote }}
+            {{- end }}
+            {{- if .Values.postfix.relay }}
+            - name: RELAY
+              value: {{ .Values.postfix.relay | quote }}
+            {{- end }}
+            - name: TLS
+              value: {{ .Values.postfix.tls | quote }}
+            {{- if .Values.postfix.mynetworks }}
+            - name: MY_NETWORKS
+              value: {{ .Values.postfix.mynetworks | join "," | quote }}
+            {{- end }}
+            {{- if .Values.postfix.mydestination }}
+            - name: MY_DESTINATION
+              value: {{ .Values.postfix.mydestination | join "," | quote }}
+            {{- end }}
+            {{- if .Values.postfix.mailname }}
+            - name: MAILNAME
+              value: {{ .Values.postfix.mailname | quote }}
+            {{- end }}
+            {{- if .Values.postfix.sasl_auth }}
+            - name: SASL_AUTH
+              value: {{ .Values.postfix.sals_auth | quote }}
+            {{- end }}
+          ports:
+            - name: smtp
+              containerPort: 25
+              protocol: TCP
+#          livenessProbe:
+#            tcpSocket:
+#              port: smtp
+#          readinessProbe:
+#            tcpSocket:
+#              port: smtp
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
