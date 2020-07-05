@@ -25,6 +25,18 @@ spec:
         prometheus.io/scrape: "true"
 {{- end }}
     spec:
+{{- if .Values.metrics.enabled }}
+      initContainers:
+        - name: create-empty-logs
+          image: "{{ .Values.initContainers.image.repository }}:{{ tpl .Values.initContainers.image.tag . }}"
+          imagePullPolicy: {{ .Values.initContainers.image.pullPolicy }}
+          securityContext:
+            runAsUser: 0
+          command: ["touch", "/var/log/maillog"]
+          volumeMounts:
+          - name: varlog
+            mountPath: /var/log
+{{- end }}
       containers:
 {{- if .Values.metrics.enabled }}
         - name: metrics

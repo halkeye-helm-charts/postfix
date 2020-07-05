@@ -9,13 +9,18 @@ image:
   tag: latest
   pullPolicy: Always
 
+initContainer:
+    repository: busybox
+    tag: 1.30.0
+    pullPolicy: IfNotPresent
+
 metrics:
   enabled: false
   resources: {}
   image:
-    repository: discourse/postfix-exporter
+    repository: unikum/postfix_exporter
     tag: latest
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
 
 nameOverride: ""
 fullnameOverride: ""
