@@ -9,6 +9,14 @@ image:
   tag: latest
   pullPolicy: Always
 
+metrics:
+  enabled: false
+  resources: {}
+  image:
+    repository: discourse/postfix-exporter
+    tag: latest
+    pullPolicy: Always
+
 nameOverride: ""
 fullnameOverride: ""
 
