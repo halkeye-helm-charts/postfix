@@ -28,8 +28,8 @@ spec:
 {{- if .Values.metrics.enabled }}
       initContainers:
         - name: create-empty-logs
-          image: "{{ .Values.initContainers.image.repository }}:{{ tpl .Values.initContainers.image.tag . }}"
-          imagePullPolicy: {{ .Values.initContainers.image.pullPolicy }}
+          image: "{{ .Values.initContainer.image.repository }}:{{ tpl .Values.initContainer.image.tag . }}"
+          imagePullPolicy: {{ .Values.initContainer.image.pullPolicy }}
           securityContext:
             runAsUser: 0
           command: ["touch", "/var/log/maillog"]
@@ -55,7 +55,7 @@ spec:
             {{- toYaml .Values.metrics.resources | nindent 12 }}
 {{- end }}
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image: "{{ .Values.image.repository }}:{{ tpl .Values.image.tag . }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             {{- if .Values.postfix.relay_host }}
