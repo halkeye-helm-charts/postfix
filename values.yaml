@@ -10,9 +10,10 @@ image:
   pullPolicy: Always
 
 initContainer:
-  repository: busybox
-  tag: 1.30.0
-  pullPolicy: IfNotPresent
+  image:
+    repository: busybox
+    tag: 1.30.0
+    pullPolicy: IfNotPresent
 
 metrics:
   enabled: false
